@@ -5,12 +5,16 @@ Sentinel is my attempt to understand how modern monitoring systems are built by 
 - What Problem does sentinel solve?
     Production incidents generate huge amounts of logs.
 
-  Finding the right log quickly is difficult.
+    Finding the right log quickly is difficult.
 
-  The longer it takes to investigate,
-  the longer production remains impacted.
+    The longer it takes to investigate,
+    the longer production remains impacted.
 
+<<<<<<< HEAD
     My honest vision for sentinel?
+=======
+- My honest vision for sentinel? 
+>>>>>>> c29bee9 (build: intialize backend structure and development environment)
     A Catalyst for better record keeping and analysis of logs so that man hours can be conserved during incidents and production.
   
 - Who is the user?
