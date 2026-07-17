@@ -1,6 +1,12 @@
 from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
+
+class Log(BaseModel):
+    level: str
+    service: str
+    message: str
 
 
 @app.get("/")
@@ -21,4 +27,11 @@ def health():
 def version():
     return {
         "version": "0.1.0"
+    }
+
+@app.post("/logs")
+def receive_log(log: Log):
+    return {
+        "status": "received",
+        "log": log
     }
