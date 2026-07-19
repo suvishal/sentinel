@@ -3,6 +3,8 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
+logs = []
+
 class Log(BaseModel):
     level: str
     service: str
@@ -31,7 +33,15 @@ def version():
 
 @app.post("/logs")
 def receive_log(log: Log):
+    
+    logs.append(log)
+    
     return {
-        "status": "received",
-        "log": log
+        "status": "stored",
+        "total_log": len(logs)
     }
+
+@app.get("/logs")
+def get_logs():
+    return logs
+
