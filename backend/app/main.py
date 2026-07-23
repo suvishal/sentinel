@@ -1,18 +1,15 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from app.database import engine
 from app import models
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app import crud
+from app import schemas
 
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-logs = []
-
-class Log(BaseModel):
-    level: str
-    service: str
-    message: str
 
 
 @app.get("/")
@@ -36,16 +33,19 @@ def version():
     }
 
 @app.post("/logs")
-def receive_log(log: Log):
+def receive_log(
+    log: schemas.LogCreate,
+    db: Session = Depends(get_db)
+):
+    return crud.create_log(
+        db=db,
+        level=log.level,
+        service=log.service,
+        message=log.message
+    )
     
-    logs.append(log)
-    
-    return {
-        "status": "stored",
-        "total_log": len(logs)
-    }
 
-@app.get("/logs")
-def get_logs():
-    return logs
+#@app.get("/logs")
+#def get_logs():
+ #   return logs
 

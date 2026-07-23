@@ -23,3 +23,6 @@ def create_log(
     db.refresh(log)
 
     return log
+
+def get_logs(db: Session):
+    return db.query(models.Log).all()
