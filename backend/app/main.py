@@ -44,6 +44,10 @@ def receive_log(
         message=log.message
     )
     
+@app.get("/logs")
+def get_logs(db: Session = Depends(get_db)):
+    return crud.get_logs(db)
+
 
 #@app.get("/logs")
 #def get_logs():
