@@ -15,3 +15,8 @@ class LogCreate(BaseModel):
     level: LogLevel
     service: str = Field(..., min_length=1, max_length=100)
     message: str = Field(..., min_length=1)
+
+class LogUpdate(BaseModel):
+    level: LogLevel
+    service: str = Field(..., min_length=1, max_length=100)
+    message: str = Field(..., min_length=1)
