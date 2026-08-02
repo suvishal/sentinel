@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app import crud
 from app import schemas
+from fastapi import HTTPException
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -48,7 +49,25 @@ def receive_log(
 def get_logs(db: Session = Depends(get_db)):
     return crud.get_logs(db)
 
+@app.put("/logs/{log_id}", response_model=schemas.Log)
+def update_log(
+    log_id: int,
+    log_update: schemas.LogUpdate,
+    db: Session = Depends(get_db)
+):
+    updated_log = crud.update_log(
+        db,
+        log_id,
+        log_update
+    )
 
+    if updated_log is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Log not found"
+        )
+
+    return updated_log
 #@app.get("/logs")
 #def get_logs():
  #   return logs

@@ -20,3 +20,9 @@ class LogUpdate(BaseModel):
     level: LogLevel
     service: str = Field(..., min_length=1, max_length=100)
     message: str = Field(..., min_length=1)
+
+class Log(LogCreate):
+    id: int
+
+    class Config:
+        from_attributes = True
