@@ -47,3 +47,21 @@ def update_log(
         db.refresh(db_log)
 
         return db_log
+
+def delete_log(
+    db: Session,
+    log_id: int
+    ):
+     
+        db_log = db.query(models.Log).filter(
+                models.Log.id == log_id
+        ).first()
+
+        if db_log is None:
+            return None
+
+        db.delete(db_log)
+
+        db.commit()
+
+        return True

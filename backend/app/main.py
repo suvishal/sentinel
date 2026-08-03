@@ -7,6 +7,7 @@ from app.database import get_db
 from app import crud
 from app import schemas
 from fastapi import HTTPException
+from fastapi import Response
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -68,6 +69,7 @@ def update_log(
         )
 
     return updated_log
+
 #@app.get("/logs")
 #def get_logs():
  #   return logs
