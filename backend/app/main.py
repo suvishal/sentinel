@@ -8,6 +8,8 @@ from app import crud
 from app import schemas
 from fastapi import HTTPException
 from fastapi import Response
+from fastapi import status
+
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -69,6 +71,21 @@ def update_log(
         )
 
     return updated_log
+
+@app.delete("/logs/{log_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_log(
+    log_id: int,
+    db: Session = Depends(get_db)
+):
+    deleted = crud.delete_log(db, log_id)
+
+    if deleted is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Log not found"
+        )
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 #@app.get("/logs")
 #def get_logs():
