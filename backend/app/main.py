@@ -9,7 +9,8 @@ from app import schemas
 from fastapi import HTTPException
 from fastapi import Response
 from fastapi import status
-
+from typing import Optional
+from fastapi import Query
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -49,8 +50,15 @@ def receive_log(
     )
     
 @app.get("/logs")
-def get_logs(db: Session = Depends(get_db)):
-    return crud.get_logs(db)
+def get_logs(
+    level: Optional[schemas.LogLevel] = None,
+service: Optional[str] = None, 
+limit: int = Query(25, ge=1, le=100),
+offset: int = Query(0, ge=0),
+
+    db: Session = Depends(get_db)
+):
+    return crud.get_logs(db, level, service, limit, offset)
 
 @app.put("/logs/{log_id}", response_model=schemas.Log)
 def update_log(

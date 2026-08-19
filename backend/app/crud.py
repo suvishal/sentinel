@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 from app import schemas
 from app import models
+from typing import Optional
+from fastapi import Query
 
 
 def create_log(
@@ -24,8 +26,24 @@ def create_log(
 
     return log
 
-def get_logs(db: Session):
-    return db.query(models.Log).all()
+def get_logs( db: Session,
+    level: Optional[schemas.LogLevel] = None,
+    service: Optional[str] = None,
+    limit: int = 25,
+    offset: int = 0
+    ):
+    query = db.query(models.Log)
+
+    if level:
+        query = query.filter(models.Log.level == level)
+
+    if service:
+        query = query.filter(models.Log.service == service)
+   
+    query = query.offset(offset).limit(limit)
+
+    return query.all()
+   
 
 def update_log(
     db: Session,
