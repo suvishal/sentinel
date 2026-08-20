@@ -29,16 +29,22 @@ def create_log(
 def get_logs( db: Session,
     level: Optional[schemas.LogLevel] = None,
     service: Optional[str] = None,
+    search: Optional[str] = None,
     limit: int = 25,
     offset: int = 0
     ):
     query = db.query(models.Log)
+    
+    if search:
+        query = query.filter(models.Log.message.ilike(f"%{search}%"))
 
     if level:
         query = query.filter(models.Log.level == level)
 
     if service:
         query = query.filter(models.Log.service == service)
+    
+    
    
     query = query.offset(offset).limit(limit)
 

@@ -52,13 +52,19 @@ def receive_log(
 @app.get("/logs")
 def get_logs(
     level: Optional[schemas.LogLevel] = None,
-service: Optional[str] = None, 
+service: Optional[str] = None,  
+search: Optional[str] = None,
 limit: int = Query(25, ge=1, le=100),
 offset: int = Query(0, ge=0),
 
     db: Session = Depends(get_db)
 ):
-    return crud.get_logs(db, level, service, limit, offset)
+    return crud.get_logs(db=db,
+    level=level,
+    service=service,
+    search=search,
+    limit=limit,
+    offset=offset)
 
 @app.put("/logs/{log_id}", response_model=schemas.Log)
 def update_log(
