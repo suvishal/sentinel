@@ -11,6 +11,7 @@ from fastapi import Response
 from fastapi import status
 from typing import Optional
 from fastapi import Query
+from datetime import datetime
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -52,10 +53,12 @@ def receive_log(
 @app.get("/logs")
 def get_logs(
     level: Optional[schemas.LogLevel] = None,
-service: Optional[str] = None,  
-search: Optional[str] = None,
-limit: int = Query(25, ge=1, le=100),
-offset: int = Query(0, ge=0),
+    service: Optional[str] = None,  
+    search: Optional[str] = None,
+    limit: int = Query(25, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    start_time: Optional[datetime] = None,
+    end_time: Optional[datetime] = None,
 
     db: Session = Depends(get_db)
 ):
@@ -64,7 +67,10 @@ offset: int = Query(0, ge=0),
     service=service,
     search=search,
     limit=limit,
-    offset=offset)
+    offset=offset,
+    start_time=start_time,
+    end_time=end_time
+    )
 
 @app.put("/logs/{log_id}", response_model=schemas.Log)
 def update_log(

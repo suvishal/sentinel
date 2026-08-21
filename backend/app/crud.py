@@ -3,6 +3,7 @@ from app import schemas
 from app import models
 from typing import Optional
 from fastapi import Query
+from datetime import datetime
 
 
 def create_log(
@@ -15,9 +16,9 @@ def create_log(
     log = models.Log(
         level=level,
         service=service,
-        message=message
-    )
-
+        message=message,
+        timestamp=datetime.now()
+)
     db.add(log)
 
     db.commit()
@@ -31,13 +32,21 @@ def get_logs( db: Session,
     service: Optional[str] = None,
     search: Optional[str] = None,
     limit: int = 25,
-    offset: int = 0
+    offset: int = 0,
+    start_time: Optional[datetime] = None,
+    end_time: Optional[datetime] = None
     ):
     query = db.query(models.Log)
     
     if search:
         query = query.filter(models.Log.message.ilike(f"%{search}%"))
 
+    if start_time:
+        query = query.filter(models.Log.timestamp >= start_time)
+
+    if end_time:
+        query = query.filter(models.Log.timestamp <= end_time)
+    
     if level:
         query = query.filter(models.Log.level == level)
 
