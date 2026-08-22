@@ -40,12 +40,6 @@ def get_logs( db: Session,
     
     if search:
         query = query.filter(models.Log.message.ilike(f"%{search}%"))
-
-    if start_time:
-        query = query.filter(models.Log.timestamp >= start_time)
-
-    if end_time:
-        query = query.filter(models.Log.timestamp <= end_time)
     
     if level:
         query = query.filter(models.Log.level == level)
@@ -53,7 +47,13 @@ def get_logs( db: Session,
     if service:
         query = query.filter(models.Log.service == service)
     
+    if start_time:
+        query = query.filter(models.Log.timestamp >= start_time)
+
+    if end_time:
+        query = query.filter(models.Log.timestamp <= end_time)
     
+    query = query.order_by(models.Log.timestamp.asc())
    
     query = query.offset(offset).limit(limit)
 
