@@ -15,3 +15,5 @@ class Log(Base):
     message = Column(String, nullable=False)
 
     timestamp = Column(DateTime)
+    
+    request_id = Column(String, index=True)
