@@ -27,5 +27,6 @@ class LogUpdate(BaseModel):
 class Log(LogCreate):
     id: int
     timestamp: Optional[datetime] = None
+    request_id: str
     class Config:
         from_attributes = True

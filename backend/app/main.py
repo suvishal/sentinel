@@ -59,7 +59,7 @@ def get_logs(
     offset: int = Query(0, ge=0),
     start_time: Optional[datetime] = None,
     end_time: Optional[datetime] = None,
-
+    request_id: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     return crud.get_logs(db=db,
@@ -69,7 +69,8 @@ def get_logs(
     limit=limit,
     offset=offset,
     start_time=start_time,
-    end_time=end_time
+    end_time=end_time,
+    request_id=request_id
     )
 
 @app.put("/logs/{log_id}", response_model=schemas.Log)

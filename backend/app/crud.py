@@ -4,6 +4,7 @@ from app import models
 from typing import Optional
 from fastapi import Query
 from datetime import datetime
+import uuid
 
 
 def create_log(
@@ -17,7 +18,8 @@ def create_log(
         level=level,
         service=service,
         message=message,
-        timestamp=datetime.now()
+        timestamp=datetime.now(),
+        request_id = str(uuid.uuid4())
 )
     db.add(log)
 
@@ -34,7 +36,8 @@ def get_logs( db: Session,
     limit: int = 25,
     offset: int = 0,
     start_time: Optional[datetime] = None,
-    end_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None,
+    request_id: Optional[str] = None
     ):
     query = db.query(models.Log)
     
@@ -52,6 +55,9 @@ def get_logs( db: Session,
 
     if end_time:
         query = query.filter(models.Log.timestamp <= end_time)
+    
+    if request_id:
+        query = query.filter(models.Log.request_id == request_id)
     
     query = query.order_by(models.Log.timestamp.asc())
    
