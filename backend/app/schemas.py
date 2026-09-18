@@ -1,6 +1,6 @@
 from enum import Enum
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict 
 from typing import Optional
 
 
@@ -27,6 +27,6 @@ class LogUpdate(BaseModel):
 class Log(LogCreate):
     id: int
     timestamp: Optional[datetime] = None
-    request_id: str
-    class Config:
-        from_attributes = True
+    request_id: Optional[str]
+    
+    model_config = ConfigDict(from_attributes=True)

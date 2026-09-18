@@ -38,7 +38,11 @@ def version():
         "version": "0.1.0"
     }
 
-@app.post("/logs")
+@app.post(
+    "/logs",
+    response_model=schemas.Log,
+    status_code=status.HTTP_201_CREATED
+)
 def receive_log(
     log: schemas.LogCreate,
     db: Session = Depends(get_db)
@@ -50,7 +54,7 @@ def receive_log(
         message=log.message
     )
     
-@app.get("/logs")
+@app.get("/logs", response_model=list[schemas.Log])
 def get_logs(
     level: Optional[schemas.LogLevel] = None,
     service: Optional[str] = None,  
@@ -108,7 +112,4 @@ def delete_log(
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-#@app.get("/logs")
-#def get_logs():
- #   return logs
 
