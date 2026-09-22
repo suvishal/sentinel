@@ -1,6 +1,4 @@
 from fastapi import FastAPI
-from app.database import engine
-from app import models
 from fastapi import Depends
 from sqlalchemy.orm import Session
 from app.database import get_db
@@ -13,7 +11,7 @@ from typing import Optional
 from fastapi import Query
 from datetime import datetime
 
-models.Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI()
 

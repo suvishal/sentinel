@@ -1,10 +1,4 @@
-from fastapi.testclient import TestClient
-from backend.app.main import app
-
-client = TestClient(app)
-
-
-def test_create_log():
+def test_create_log(client):
     response = client.post(
         "/logs",
         json={
@@ -26,7 +20,16 @@ def test_create_log():
     assert data["request_id"] is not None
 
 
-def test_get_logs():
+def test_get_logs(client):
+    client.post(
+        "/logs",
+        json={
+            "level": "INFO",
+            "service": "test-service",
+            "message": "Test log message"
+        }
+    )
+
     response = client.get("/logs")
 
     assert response.status_code == 200
@@ -34,9 +37,11 @@ def test_get_logs():
     data = response.json()
 
     assert isinstance(data, list)
-    assert len(data) > 0
+    assert len(data) == 1
+    assert data[0]["service"] == "test-service"
 
-def test_create_log_validation():
+
+def test_create_log_validation(client):
     response = client.post(
         "/logs",
         json={
