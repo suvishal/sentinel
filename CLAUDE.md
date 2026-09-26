@@ -50,7 +50,7 @@ alembic upgrade head
 - `the_idea.md` still has unresolved merge-conflict markers.
 - `crud.create_log` uses `datetime.now()` (naive local time); timestamps should be UTC-aware.
 - `alembic.ini` hardcodes a local `sqlalchemy.url`; it should read `DATABASE_URL` from the environment.
-- `backend/requirements.txt` leaves SQLAlchemy, psycopg2-binary, python-dotenv and pytest unpinned, and alembic and httpx (needed by `TestClient`) are missing.
+- Alembic has no initial migration that creates `logs`: `f12a16fc1aeb` only alters it (`down_revision = None`), so `alembic upgrade head` fails on an empty database.
 - `backend/README.md` is empty.
 - No CI yet to run tests on PRs.
 
