@@ -1,0 +1,29 @@
+# Only used by the dev container (Codespaces), not by `docker compose up` at the repo root.
+services:
+
+  # Where you (and VS Code) work. It just stays alive; you run uvicorn and pytest yourself.
+  app:
+    image: mcr.microsoft.com/devcontainers/python:3.12
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+    environment:
+      # Throwaway credentials for a database that only exists inside this Codespace.
+      DATABASE_URL: postgresql://sentinel:sentinel@db:5432/sentinel
+      TEST_DATABASE_URL: postgresql://sentinel:sentinel@db:5432/sentinel_test
+    depends_on:
+      - db
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: sentinel
+      POSTGRES_USER: sentinel
+      POSTGRES_PASSWORD: sentinel
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      # Postgres runs *.sql files in this folder the first time it starts.
+      - ./init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql
+
+volumes:
+  postgres_data:

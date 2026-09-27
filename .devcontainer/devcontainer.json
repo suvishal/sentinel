@@ -1,0 +1,22 @@
+{
+  // Dev environment for GitHub Codespaces (VS Code in the browser).
+  // Codespaces reads this file, starts the services in docker-compose.yml,
+  // and opens the editor inside the "app" container.
+  "name": "Sentinel",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  // Runs once, after the container is created.
+  // alembic and httpx aren't in requirements.txt yet (known gap), so install them here too.
+  "postCreateCommand": "pip install -r backend/requirements.txt alembic httpx",
+
+  // Lets you open the running API in a browser tab (uvicorn on port 8000).
+  "forwardPorts": [8000],
+
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  }
+}
